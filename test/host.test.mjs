@@ -10,11 +10,19 @@
  */
 import assert from 'node:assert/strict';
 import http from 'node:http';
+import { spawnSync } from 'node:child_process';
 import { __test, apply } from '../index.js';
 
 const { JpegSplitter, jpegSize, androidTextArg, clamp, buildToolDefinitions, producerSpec } = __test;
 
+/** 工具链是否存在：ENOENT 才算缺，退出码非零不算（`--help` 常常非零退出）。 */
+function toolAvailable(bin) {
+  const probe = spawnSync(bin, ['--help'], { stdio: 'ignore', timeout: 15000 });
+  return probe.error === undefined;
+}
+
 let passed = 0;
+let skipped = 0;
 function check(name, fn) {
   return Promise.resolve()
     .then(fn)
@@ -26,6 +34,19 @@ function check(name, fn) {
       console.error(`  FAIL ${name}\n       ${error.message}`);
       process.exitCode = 1;
     });
+}
+
+/**
+ * 依赖本机工具链的用例：没有 xcrun / avdmanager 就明确跳过。
+ * CI 跑在 ubuntu 上，这两样都不存在；本机 macOS 带 SDK 时照常全跑。
+ */
+function checkSdk(available, tool, name, fn) {
+  if (!available) {
+    skipped += 1;
+    console.log(`  skip  ${name}（本机没有 ${tool}）`);
+    return Promise.resolve();
+  }
+  return check(name, fn);
 }
 
 // --- a minimal, structurally valid JPEG so jpegSize has real bytes to read ---
@@ -364,8 +385,9 @@ await check('POST /shutdown rejects a non-ios platform', async () => {
 // is decided before `simctl create` is spawned, so this suite never creates or
 // deletes a simulator: the unknown identifiers are values no runtime has.
 let catalogBody = null;
+const hasXcrun = toolAvailable('xcrun');
 
-await check('GET /catalog answers with device types and runtimes', async () => {
+await checkSdk(hasXcrun, 'xcrun', 'GET /catalog answers with device types and runtimes', async () => {
   const response = await fetch(`${base}/api/device-mirror/catalog`);
   assert.equal(response.status, 200);
   const body = await response.json();
@@ -386,7 +408,7 @@ await check('GET /catalog answers with device types and runtimes', async () => {
   catalogBody = body;
 });
 
-await check('POST /create without identifiers is rejected', async () => {
+await checkSdk(hasXcrun, 'xcrun', 'POST /create without identifiers is rejected', async () => {
   const response = await fetch(`${base}/api/device-mirror/create`, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
@@ -398,7 +420,7 @@ await check('POST /create without identifiers is rejected', async () => {
   assert.match(body.error, /missing/);
 });
 
-await check('POST /create with an unknown device type is rejected', async () => {
+await checkSdk(hasXcrun, 'xcrun', 'POST /create with an unknown device type is rejected', async () => {
   const response = await fetch(`${base}/api/device-mirror/create`, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
@@ -413,7 +435,7 @@ await check('POST /create with an unknown device type is rejected', async () => 
   assert.equal(body.error, 'unknown deviceTypeIdentifier');
 });
 
-await check('POST /create with an unknown runtime is rejected', async () => {
+await checkSdk(hasXcrun, 'xcrun', 'POST /create with an unknown runtime is rejected', async () => {
   const deviceType = catalogBody?.deviceTypes?.[0];
   assert.ok(deviceType, 'the catalogue returned no device type to validate against');
   const response = await fetch(`${base}/api/device-mirror/create`, {
@@ -442,7 +464,9 @@ await check('GET /create is a 405', async () => {
 // Same rule as the iOS routes: only reads and rejection branches. Nothing here
 // creates, boots or deletes an AVD, so the suite is safe to run against a real
 // SDK - every case is decided before `avdmanager` is spawned.
-await check('GET /android/catalog answers with system images and device definitions', async () => {
+const hasAvdmanager = toolAvailable('avdmanager');
+
+await checkSdk(hasAvdmanager, 'avdmanager', 'GET /android/catalog answers with system images and device definitions', async () => {
   const response = await fetch(`${base}/api/device-mirror/android/catalog`);
   assert.equal(response.status, 200);
   const body = await response.json();
@@ -502,4 +526,4 @@ await check('GET /android/boot is a 405', async () => {
 });
 
 server.close();
-console.log(`\n${passed} checks passed${process.exitCode ? ' (with failures)' : ''}`);
+console.log(`\n${passed} checks passed${skipped ? `, ${skipped} skipped（缺工具链）` : ''}${process.exitCode ? ' (with failures)' : ''}`);
