@@ -1,5 +1,5 @@
 {
-  "name": "@local/dsh-device-mirror",
+  "name": "dsh-device-mirror",
   "version": "0.4.1",
   "private": true,
   "type": "module",
@@ -42,5 +42,6 @@
     "dsh",
     "dsh-plugin",
     "deepseek-harness"
-  ]
+  ],
+  "license": "MIT"
 }
