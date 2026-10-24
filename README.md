@@ -2,6 +2,14 @@
 
 ![dsh-device-mirror](https://raw.githubusercontent.com/zengxiaolou/dsh-device-mirror/main/docs/images/promo.png)
 
+<p>
+<a href="https://www.npmjs.com/package/dsh-device-mirror"><img alt="npm" src="https://img.shields.io/npm/v/dsh-device-mirror?color=2f81f7&label=npm"></a>
+<a href="https://www.npmjs.com/package/dsh-device-mirror"><img alt="downloads" src="https://img.shields.io/npm/dw/dsh-device-mirror?color=3fb950"></a>
+<a href="https://github.com/zengxiaolou/dsh-device-mirror/blob/main/LICENSE"><img alt="license" src="https://img.shields.io/npm/l/dsh-device-mirror?color=bf8700"></a>
+<img alt="dsh plugin" src="https://img.shields.io/badge/DSH-plugin-7aa2ff">
+<a href="https://github.com/zengxiaolou/dsh-device-mirror/stargazers"><img alt="stars" src="https://img.shields.io/github/stars/zengxiaolou/dsh-device-mirror?color=8250df"></a>
+</p>
+
 
 把 **iOS 模拟器 / 安卓模拟机**的实时画面投进 DSH，并能直接在上面点、拖、打字。
 
