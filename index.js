@@ -33,7 +33,7 @@ import os from 'node:os';
 import net from 'node:net';
 import path from 'node:path';
 
-export const PLUGIN_ID = '@local/dsh-device-mirror';
+export const PLUGIN_ID = 'dsh-device-mirror';
 const PLUGIN_VERSION = '0.4.1';
 const ROUTE_PREFIX = '/api/device-mirror';
 const BOUNDARY = 'dshdevicemirrorframe';

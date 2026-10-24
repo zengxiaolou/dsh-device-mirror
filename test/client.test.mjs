@@ -18,7 +18,7 @@ const storage = new Map();
 globalThis.window = {
   __ModuleLoader__: {
     load({ id, factory }) {
-      assert.equal(id, '@local/dsh-device-mirror', 'client module id must equal the package name');
+      assert.equal(id, 'dsh-device-mirror', 'client module id must equal the package name');
       factoryResult = factory((name) => {
         if (name === 'react') return stubReact();
         throw new Error(`unexpected require("${name}")`);

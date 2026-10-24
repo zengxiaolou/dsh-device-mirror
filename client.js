@@ -16,7 +16,7 @@
  * plugin's DOM is read.
  */
 window.__ModuleLoader__.load({
-  id: '@local/dsh-device-mirror',
+  id: 'dsh-device-mirror',
   factory(require) {
     const React = require('react');
     const h = React.createElement;
