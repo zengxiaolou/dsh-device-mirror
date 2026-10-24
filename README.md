@@ -82,6 +82,13 @@
 
 ---
 
+## 效果
+
+![右栏设备镜像](https://raw.githubusercontent.com/zengxiaolou/dsh-device-mirror/main/docs/images/effect.png)
+
+> 示意图（按主题令牌渲染）：右栏一个 `设备镜像` 面板，顶部选设备，中间是模拟器实时画面，工具栏可切换 点按 / 拖动 / 文字 / 截图。
+
+
 ## 生命周期：什么时候起、什么时候停
 
 设备不是常驻进程，面板不是常驻窗口。约定如下：
