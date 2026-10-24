@@ -1,0 +1,33 @@
+{
+  "name": "@local/dsh-device-mirror",
+  "version": "0.4.1",
+  "private": true,
+  "type": "module",
+  "description": "Live iOS Simulator / Android emulator mirror in the DSH sidebar and a floating overlay, with touch back-channel.",
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg"
+  },
+  "files": [
+    "index.js",
+    "client.js",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "icon.svg",
+    "README.md"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true
+    }
+  },
+  "scripts": {
+    "test": "node test/host.test.mjs && node test/client.test.mjs"
+  }
+}

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Device Mirror">
+  <rect x="18" y="6" width="28" height="52" rx="7" fill="none" stroke="#22c1a4" stroke-width="4"/>
+  <rect x="22" y="14" width="20" height="34" rx="3" fill="#22c1a4" opacity="0.18"/>
+  <rect x="22" y="14" width="20" height="34" rx="3" fill="none" stroke="#22c1a4" stroke-width="2" opacity="0.55"/>
+  <circle cx="32" cy="52" r="2.4" fill="#22c1a4"/>
+  <path d="M27 31.5 31 35l6.5-8" fill="none" stroke="#22c1a4" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="47" cy="15" r="4.6" fill="#30d158"/>
+</svg>
