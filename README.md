@@ -1,5 +1,8 @@
 # Device Mirror（`@local/dsh-device-mirror`）
 
+![dsh-device-mirror](https://raw.githubusercontent.com/zengxiaolou/dsh-device-mirror/main/docs/images/promo.png)
+
+
 把 **iOS 模拟器 / 安卓模拟机**的实时画面投进 DSH，并能直接在上面点、拖、打字。
 
 **只有一种形态：浮窗，而且可以开多个。**
