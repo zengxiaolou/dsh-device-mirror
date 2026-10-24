@@ -29,5 +29,18 @@
   },
   "scripts": {
     "test": "node test/host.test.mjs && node test/client.test.mjs"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zengxiaolou/dsh-device-mirror"
+  },
+  "homepage": "https://github.com/zengxiaolou/dsh-device-mirror",
+  "bugs": {
+    "url": "https://github.com/zengxiaolou/dsh-device-mirror/issues"
+  },
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness"
+  ]
 }
