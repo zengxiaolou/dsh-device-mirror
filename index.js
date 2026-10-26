@@ -274,6 +274,28 @@ const buildToolDefinitions = () => createToolDefinitions({
 
 export const inject = ['webServer'];
 
+/**
+ * 请求准入：官方 web-server 契约里 carrier 不做鉴权与 Origin 策略，每个路由要在 handler
+ * 开头自己调 connection.requestRejection(req)。宿主没有 connection 服务时放行，保持旧版本兼容。
+ * @returns {boolean} true 表示已经拒绝并写完响应，调用方必须立即返回
+ */
+function deniedByConnection(ctx, req, res) {
+  let rejection;
+  try {
+    const connection = typeof ctx?.get === 'function' ? ctx.get('connection') : ctx?.connection;
+    rejection = connection && typeof connection.requestRejection === 'function'
+      ? connection.requestRejection(req)
+      : undefined;
+  } catch {
+    rejection = undefined;
+  }
+  if (!rejection) return false;
+  res.statusCode = rejection;
+  res.setHeader('content-type', 'application/json');
+  res.end(JSON.stringify({ ok: false, error: rejection === 401 ? 'unauthorized' : 'forbidden' }));
+  return true;
+}
+
 import { createRoutes } from './host/routes.js';
 
 const { handleRequest } = createRoutes({
@@ -344,6 +366,7 @@ export function apply(ctx) {
       kind: 'prefix',
       path: ROUTE_PREFIX,
       handler: (req, res) => {
+        if (deniedByConnection(ctx, req, res)) return;
         handleRequest(req, res);
       },
     }),
