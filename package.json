@@ -1,6 +1,6 @@
 {
   "name": "dsh-device-mirror",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "type": "module",
   "description": "Live iOS Simulator / Android emulator mirror in the DSH sidebar and a floating overlay, with touch back-channel.",
   "exports": {
